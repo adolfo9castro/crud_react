@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -21,6 +21,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { v4 as uuid } from "uuid";
 import Modals from "./components/Modals";
+import { getCollection, addDocument } from "./components/database";
 
 function App() {
   const [task, setTask] = useState("")
@@ -29,6 +30,13 @@ function App() {
   const [launchFunction, setLaunchFunction] = useState("")
   const [taskId, setTaskId] = useState("")
   const [themeForModal, setThemeForModal] = useState({})
+
+  useEffect(() => {
+    (async () => {
+      const result = await getCollection("tasks")
+      setTasks(result.data)
+    })()
+  }, [])
 
 
   const addTask = () => {
@@ -110,17 +118,17 @@ function App() {
                             <Typography variant="h5">{task.name}</Typography>
                           </ListItemText>
                           <Stack direction="row" spacing={2}>
-                            <Button 
-                              variant="contained" 
-                              color="warning" 
+                            <Button
+                              variant="contained"
+                              color="warning"
                               startIcon={<EditIcon />}
                               onClick={() => editeTask(task.id)}
                             >
                               Editar
                             </Button>
-                            <Button 
-                              variant="contained" 
-                              color="error" 
+                            <Button
+                              variant="contained"
+                              color="error"
                               startIcon={<DeleteIcon />}
                               onClick={() => deleteTask(task.id)}
                             >
