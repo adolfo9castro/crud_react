@@ -8,7 +8,6 @@ import {
   Typography,
   TextField,
   Grid,
-  Divider,
   Container,
   FormControl,
   Button,
@@ -63,7 +62,7 @@ function App() {
     setThemeForModal({
       title: "⚠ Precaución",
       message: "Está a punto de eliminar una tarea y no se puede recuperar",
-      button: "danger",
+      button: "error",
       messageButton: "Sí, eliminar",
       buttonSecundary: "primary",
       messageButtonSecundary: "No, no eliminar",
@@ -93,110 +92,86 @@ function App() {
         <Grid container marginBottom={5} borderBottom={2} paddingBottom={3}>
           <Typography level="h2" variant="h3">Tareas</Typography>
         </Grid>
-
-        <Divider />
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
-            <Typography level="h3" variant="h4" align="center">Tareas por hacer</Typography>
-            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-              <ListItem alignItems="flex-start">
-                <ListItemText
-                  primary="Brunch this weekend?"
-                  secondary=" — I'll be in your neighborhood doing errands this…"
-                />
-                <Stack direction="row" spacing={2}>
-
-                  <Button variant="contained" color="warning" startIcon={<EditIcon/>}>
-                    Editar
-                  </Button>
-                  <Button variant="contained" color="error" startIcon={<DeleteIcon />}>
-                    Eliminar
-                  </Button>
-                </Stack>
-              </ListItem>
-
-
-            </List>
+            {
+              tasks.length === 0
+                ?
+                <Typography level="h3" variant="h4" align="center">Aún no hay tareas</Typography>
+                :
+                <><Typography level="h3" variant="h4" align="center">
+                  Tareas por hacer: {tasks.length}
+                </Typography>
+                  <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                    {
+                      tasks.map((task) => (
+                        <ListItem alignItems="flex-start" key={task.id}>
+                          <ListItemText >
+                            <Typography variant="h5">{task.name}</Typography>
+                          </ListItemText>
+                          <Stack direction="row" spacing={2}>
+                            <Button 
+                              variant="contained" 
+                              color="warning" 
+                              startIcon={<EditIcon />}
+                              onClick={() => editeTask(task.id)}
+                            >
+                              Editar
+                            </Button>
+                            <Button 
+                              variant="contained" 
+                              color="error" 
+                              startIcon={<DeleteIcon />}
+                              onClick={() => deleteTask(task.id)}
+                            >
+                              Eliminar
+                            </Button>
+                          </Stack>
+                        </ListItem>
+                      ))
+                    }
+                  </List></>
+            }
           </Grid>
 
           <Grid item xs={12} md={4}>
             <Typography level="h3" variant="h4" align="center">Agregar tarea</Typography>
             <Grid item xs={12}>
               <FormControl fullWidth sx={{ m: 1 }}>
-                <TextField id="outlined-basic" label="Ingresa nueva tarea" variant="outlined" />
+                <TextField
+                  id="outlined-basic"
+                  label="Ingresa nueva tarea"
+                  variant="outlined"
+                  onChange={(text) => { setTask(text.target.value) }}
+                  value={task}
+                />
 
               </FormControl>
               <FormControl fullWidth sx={{ m: 1 }}>
-                <Button variant="contained" startIcon={<AddIcon />}>Agregar</Button>
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  type="submit"
+                  onClick={addTask}
+                >
+                  Agregar
+                </Button>
               </FormControl>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
+      <Modals
+        alertMessage={alertMessage}
+        setAlertMessage={setAlertMessage}
+        launchFunction={launchFunction}
+        setTasks={setTasks}
+        tasks={tasks}
+        taskId={taskId}
+        themeForModal={themeForModal}
+      />
 
     </Container>
-    /*     <div className="container mt-5">
-          agadsfgsdfg
-          <h1>Tareas</h1><hr />
-          <div className="row">
-            <div className="col-12 col-md-8">
-              {
-                tasks.length === 0
-                  ? <h4 className="text-center">No hay tareas aún</h4>
-                  :
-                  <><h4 className="text-center">Tareas por hacer: {tasks.length}</h4>
-                    <ul className="list-group">
-                      {tasks.map((task) => (
-                        <li className="list-group-item" key={task.id}>
-                          <span className="lead">{task.name}</span>
-                          <button
-                            className="btn btn-danger btn-sm float-end mx-2"
-                            onClick={() => deleteTask(task.id)}
-                          >
-                            Eliminar
-                          </button>
-                          <button
-                            className="btn btn-warning btn-sm float-end"
-                            onClick={() => editeTask(task.id)}
-                          >
-                            Editar
-                          </button>
-                        </li>
-                      ))}
-                    </ul></>
-              }
-            </div>
-            <div className="col-12 col-md-4">
-              <h4 className="text-center">Agragar tarea</h4>
-              <div className="d-grid gap-2">
-                <input
-                  type="text"
-                  className="form-control mb-2"
-                  placeholder="Ingresa nueva tarea"
-                  onChange={(text) => { setTask(text.target.value) }}
-                  value={task}
-                />
-                <button
-                  className={`btn btn-dark btn-block ${task === "" ? "enable" : "enable"}`}
-                  type="submit"
-                  onClick={addTask}
-                >
-                  Agregar
-                </button>
-    
-              </div>
-            </div>
-            <Modals
-            alertMessage={alertMessage}
-            setAlertMessage={setAlertMessage}
-            launchFunction={launchFunction}
-            setTasks={setTasks}
-            tasks={tasks}
-            taskId={taskId}
-            themeForModal={themeForModal}
-          />
-          </div>
-        </div> */
   );
 }
 

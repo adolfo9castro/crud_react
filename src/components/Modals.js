@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    FormControl,
+    TextField
+} from "@mui/material/"
 
 const Modals = ({
     alertMessage,
@@ -24,56 +30,71 @@ const Modals = ({
         },
         askForEditeTask: () => {
             setAlertMessage(false)
-            setTasks(tasks.map(task => task.id === taskId ? { ...task, name: editedTask} :task))
+            setTasks(tasks.map(task => task.id === taskId ? { ...task, name: editedTask } : task))
             setEditedTask("")
         }
     }
 
     return (
-        <Modal
-            show={alertMessage} onHide={() => (setAlertMessage(false))}
-            centered
+
+        <Dialog
+            open={alertMessage}
+            onClose={() => (setAlertMessage(false))}
+            fullWidth={true}
         >
-            <Modal.Header closeButton>
-                <Modal.Title>{themeForModal.title}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                {themeForModal.message}
+            <DialogTitle id="alert-dialog-title">
+                {themeForModal.title}
+            </DialogTitle>
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    {themeForModal.message}
+                </DialogContentText>
+
                 {
                     themeForModal.editTaskModal
                         ?
-                        <Form>
-                            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                                <Form.Label></Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Tarea..."
-                                    autoFocus
-                                    onChange={(text) => { setEditedTask(text.target.value) }}
-                                    value={editedTask}
-                                />
-                            </Form.Group>
-                        </Form>
+
+                        <FormControl fullWidth sx={{ m: 1 }}>
+                            <TextField
+                            id="outlined-basic"
+                            label="Tarea..."
+                            autoFocus
+                            margin="dense"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            onChange={(text) => { setEditedTask(text.target.value) }}
+                            value={editedTask}
+                            />
+                        </FormControl>
                         : ""
                 }
 
-            </Modal.Body>
-            <Modal.Footer>
+            </DialogContent>
+            <DialogActions>
                 {
                     themeForModal.buttonSecundary
                         ?
-                        <Button variant={themeForModal.buttonSecundary} onClick={() => (setAlertMessage(false))}>
+                        <Button 
+                            variant="outlined"
+                            color={themeForModal.buttonSecundary} 
+                            onClick={() => (setAlertMessage(false))}
+                        >
                             {themeForModal.messageButtonSecundary}
                         </Button>
                         : ""
                 }
-
-
-                <Button variant={themeForModal.button} onClick={() => (functionLauched[launchFunction]())}>
+                <Button 
+                    variant="outlined"
+                    onClick={() => (functionLauched[launchFunction]())} 
+                    autoFocus
+                    color={themeForModal.button}
+                >
                     {themeForModal.messageButton}
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </DialogActions>
+        </Dialog>
+
     )
 }
 
