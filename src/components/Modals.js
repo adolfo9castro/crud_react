@@ -9,6 +9,7 @@ import {
     FormControl,
     TextField
 } from "@mui/material/"
+import { deleteDocument, updateDocument } from "./database"
 
 const Modals = ({
     alertMessage,
@@ -27,10 +28,18 @@ const Modals = ({
         askForEliminateTask: () => {
             setAlertMessage(false)
             setTasks(tasks.filter(task => task.id !== taskId))
+            deleteDocument(taskId)
+
         },
         askForEditeTask: () => {
             setAlertMessage(false)
-            setTasks(tasks.map(task => task.id === taskId ? { ...task, name: editedTask } : task))
+            setTasks(tasks.map(task => {
+                if (task.id === taskId) {
+                    updateDocument(task.id, { name: editedTask })
+                    return { ...task, name: editedTask }
+                }
+                else return task
+            }))
             setEditedTask("")
         }
     }
@@ -56,15 +65,15 @@ const Modals = ({
 
                         <FormControl fullWidth sx={{ m: 1 }}>
                             <TextField
-                            id="outlined-basic"
-                            label="Tarea..."
-                            autoFocus
-                            margin="dense"
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            onChange={(text) => { setEditedTask(text.target.value) }}
-                            value={editedTask}
+                                id="outlined-basic"
+                                label="Tarea..."
+                                autoFocus
+                                margin="dense"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                onChange={(text) => { setEditedTask(text.target.value) }}
+                                value={editedTask}
                             />
                         </FormControl>
                         : ""
@@ -75,18 +84,18 @@ const Modals = ({
                 {
                     themeForModal.buttonSecundary
                         ?
-                        <Button 
+                        <Button
                             variant="outlined"
-                            color={themeForModal.buttonSecundary} 
+                            color={themeForModal.buttonSecundary}
                             onClick={() => (setAlertMessage(false))}
                         >
                             {themeForModal.messageButtonSecundary}
                         </Button>
                         : ""
                 }
-                <Button 
+                <Button
                     variant="outlined"
-                    onClick={() => (functionLauched[launchFunction]())} 
+                    onClick={() => (functionLauched[launchFunction]())}
                     autoFocus
                     color={themeForModal.button}
                 >

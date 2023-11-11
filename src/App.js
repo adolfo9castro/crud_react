@@ -14,14 +14,19 @@ import {
   List,
   ListItem,
   ListItemText,
-  Stack
+  Stack,
+  Skeleton,
+  Backdrop,
+  CircularProgress
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { v4 as uuid } from "uuid";
+import CheckCircleTwoToneIcon from '@mui/icons-material/CheckCircleTwoTone';
 import Modals from "./components/Modals";
 import { getCollection, addDocument } from "./components/database";
+import styles from "./styles"
+import SkeletonComponent from "./components/Skeleton";
 
 function App() {
   const [task, setTask] = useState("")
@@ -30,16 +35,21 @@ function App() {
   const [launchFunction, setLaunchFunction] = useState("")
   const [taskId, setTaskId] = useState("")
   const [themeForModal, setThemeForModal] = useState({})
+  const [getCollectionStatus, setGetCollectionStatus] = useState(false)
+  const [openBrackDrop, setOpenBrackDrop] = useState(false)
+  const [displayCircularProgress, setdisplayCircularProgress] = useState("")
+  const [displayCheckCircleTwoToneIcon, setDisplayCheckCircleTwoToneIcon] = useState("none")
 
   useEffect(() => {
     (async () => {
       const result = await getCollection("tasks")
       setTasks(result.data)
+      setGetCollectionStatus(result.statusResponse)
     })()
   }, [])
 
 
-  const addTask = () => {
+  const addTask = async () => {
 
     if (task === "") {
       setAlertMessage(true)
@@ -52,12 +62,36 @@ function App() {
       })
     }
     else {
-      const newTask = {
-        id: uuid(),
-        name: task
+      setOpenBrackDrop(true)
+      const result = await addDocument({ name: task, position: tasks.length })
+      if (!result.statusResponse) {
+        setAlertMessage(true)
+        setLaunchFunction("justOnlyCloseModal")
+        setThemeForModal({
+          title: "Atención ha habido un error:",
+          message: result.error,
+          button: "primary",
+          messageButton: "Entendido",
+        })
       }
+      else {
+        const newTask = {
+          id: result.data.id,
+          name: task
+        }
+        setTasks([...tasks, newTask])
+        setTimeout(() => {
+          setdisplayCircularProgress("none")
+          setDisplayCheckCircleTwoToneIcon("block")
+        }, 500);
 
-      setTasks([...tasks, newTask])
+        setTimeout(() => {
+          setOpenBrackDrop(false)
+          setdisplayCircularProgress("")
+          setDisplayCheckCircleTwoToneIcon("none")
+        }, 1500);
+
+      }
       setTask("")
     }
 
@@ -92,7 +126,11 @@ function App() {
       editTaskModal: true
     })
   }
-
+  const {
+    skeletonStyles: {
+      mainTitle,
+    }
+  } = styles
   return (
     <Container fixed >
 
@@ -103,19 +141,31 @@ function App() {
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             {
-              tasks.length === 0
-                ?
-                <Typography level="h3" variant="h4" align="center">Aún no hay tareas</Typography>
-                :
-                <><Typography level="h3" variant="h4" align="center">
-                  Tareas por hacer: {tasks.length}
-                </Typography>
-                  <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                    {
+              <>
+                {
+                  getCollectionStatus
+                    ?
+                    <Typography level="h3" variant="h4" align="center">
+                      {
+                        tasks.length !== 0
+                          ? `Tareas por hacer: ${tasks.length}`
+                          : "No tiene tareas por hacer"
+                      }
+
+                    </Typography>
+                    : <Skeleton style={mainTitle} animation="pulse" variant="text" height={40} width="100%" />
+                }
+                <List sx={{ width: '100%' }}>
+                  {
+                    !getCollectionStatus
+                      ? <SkeletonComponent />
+                      :
                       tasks.map((task) => (
                         <ListItem alignItems="flex-start" key={task.id}>
                           <ListItemText >
-                            <Typography variant="h5">{task.name}</Typography>
+                            <Typography variant="h5">
+                              {task.name}
+                            </Typography>
                           </ListItemText>
                           <Stack direction="row" spacing={2}>
                             <Button
@@ -137,8 +187,9 @@ function App() {
                           </Stack>
                         </ListItem>
                       ))
-                    }
-                  </List></>
+                  }
+                </List>
+              </>
             }
           </Grid>
 
@@ -178,6 +229,13 @@ function App() {
         taskId={taskId}
         themeForModal={themeForModal}
       />
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={openBrackDrop}
+      >
+        <CircularProgress color="inherit" sx={{ display: displayCircularProgress }} />
+        <CheckCircleTwoToneIcon color="#FFF" sx={{ fontSize: 55, display: displayCheckCircleTwoToneIcon }} />
+      </Backdrop>
 
     </Container>
   );
