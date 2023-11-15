@@ -13,11 +13,12 @@ import {
   Button,
   List,
   ListItem,
-  ListItemText,
-  Stack,
   Skeleton,
   Backdrop,
-  CircularProgress
+  CircularProgress,
+  Card,
+  CardContent,
+  CardActions
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -47,7 +48,6 @@ function App() {
       setGetCollectionStatus(result.statusResponse)
     })()
   }, [])
-
 
   const addTask = async () => {
 
@@ -126,6 +126,7 @@ function App() {
       editTaskModal: true
     })
   }
+
   const {
     skeletonStyles: {
       mainTitle,
@@ -133,7 +134,6 @@ function App() {
   } = styles
   return (
     <Container fixed >
-
       <Grid container alignItems="center">
         <Grid container marginBottom={5} borderBottom={2} paddingBottom={3}>
           <Typography level="h2" variant="h3">Tareas</Typography>
@@ -162,29 +162,33 @@ function App() {
                       :
                       tasks.map((task) => (
                         <ListItem alignItems="flex-start" key={task.id}>
-                          <ListItemText >
-                            <Typography variant="h5">
-                              {task.name}
-                            </Typography>
-                          </ListItemText>
-                          <Stack direction="row" spacing={2}>
-                            <Button
-                              variant="contained"
-                              color="warning"
-                              startIcon={<EditIcon />}
-                              onClick={() => editeTask(task.id)}
-                            >
-                              Editar
-                            </Button>
-                            <Button
-                              variant="contained"
-                              color="error"
-                              startIcon={<DeleteIcon />}
-                              onClick={() => deleteTask(task.id)}
-                            >
-                              Eliminar
-                            </Button>
-                          </Stack>
+                          <Card
+                            sx={{ width: "100%" }}
+                          >
+                            <CardContent>
+                              <Typography variant="h5">
+                                {task.name}
+                              </Typography>
+                            </CardContent>
+                            <CardActions>
+                              <Button
+                                variant="contained"
+                                color="warning"
+                                startIcon={<EditIcon />}
+                                onClick={() => editeTask(task.id)}
+                              >
+                                Editar
+                              </Button>
+                              <Button
+                                variant="contained"
+                                color="error"
+                                startIcon={<DeleteIcon />}
+                                onClick={() => deleteTask(task.id)}
+                              >
+                                Eliminar
+                              </Button>
+                            </CardActions>
+                          </Card>
                         </ListItem>
                       ))
                   }

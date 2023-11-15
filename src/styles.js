@@ -10,7 +10,8 @@ const styles = {
             height: "40px",
         },
         buttons: {
-            width: "100%"
+            width: "120px",
+            height: "35px"
         },
     }
 }

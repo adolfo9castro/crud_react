@@ -3,8 +3,9 @@ import {
     Skeleton,
     Typography,
     ListItem,
-    ListItemText,
-    Stack
+    Card,
+    CardContent,
+    CardActions
 } from '@mui/material';
 import styles from "../styles"
 const {
@@ -17,38 +18,58 @@ const {
 const SkeletonComponent = () => {
     return (
         <>
-            <ListItem alignItems="flex-start">
-                <ListItemText>
-                    <Typography variant="h5">
-                        <Skeleton style={nameTask} animation="pulse" variant="text" height={40} width="100%" />
-                    </Typography>
-                </ListItemText>
-                <Stack direction="row" spacing={2} style={{ width: "35%" }}>
-                    <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} width="150" />
-                    <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} width="150" />
-                </Stack>
+
+            <ListItem alignItems="flex-start" >
+                <Card sx={{ width: "100%" }}>
+                    <CardContent>
+                        <Typography variant="h5">
+                            <Skeleton style={nameTask} animation="pulse" variant="text" height={40} width="100%" />
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} />
+                        <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} />
+                    </CardActions>
+                </Card>
             </ListItem>
-            <ListItem alignItems="flex-start">
-                <ListItemText>
-                    <Typography variant="h5">
-                        <Skeleton style={nameTask} animation="pulse" variant="text" height={40} width="100%" />
-                    </Typography>
-                </ListItemText>
-                <Stack direction="row" spacing={2} style={{ width: "35%" }}>
-                    <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} width="150" />
-                    <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} width="150" />
-                </Stack>
+            <ListItem alignItems="flex-start" >
+                <Card sx={{ width: "100%" }}>
+                    <CardContent>
+                        <Typography variant="h5">
+                            <Skeleton style={nameTask} animation="pulse" variant="text" height={40} width="100%" />
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} />
+                        <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} />
+                    </CardActions>
+                </Card>
             </ListItem>
-            <ListItem alignItems="flex-start">
-                <ListItemText>
-                    <Typography variant="h5">
-                        <Skeleton style={nameTask} animation="pulse" variant="text" height={40} width="100%" />
-                    </Typography>
-                </ListItemText>
-                <Stack direction="row" spacing={2} style={{ width: "35%" }}>
-                    <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} width="150" />
-                    <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} width="150" />
-                </Stack>
+            <ListItem alignItems="flex-start" >
+                <Card sx={{ width: "100%" }}>
+                    <CardContent>
+                        <Typography variant="h5">
+                            <Skeleton style={nameTask} animation="pulse" variant="text" height={40} width="100%" />
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} />
+                        <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} />
+                    </CardActions>
+                </Card>
+            </ListItem>
+            <ListItem alignItems="flex-start" >
+                <Card sx={{ width: "100%" }}>
+                    <CardContent>
+                        <Typography variant="h5">
+                            <Skeleton style={nameTask} animation="pulse" variant="text" height={40} width="100%" />
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} width={100} />
+                        <Skeleton style={buttons} animation="pulse" variant="rounded" height={40} width={100} />
+                    </CardActions>
+                </Card>
             </ListItem>
         </>
     )
