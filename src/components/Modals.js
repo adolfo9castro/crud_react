@@ -18,6 +18,7 @@ const Modals = ({
     setTasks,
     tasks,
     taskId,
+    taskName,
     themeForModal
 }) => {
     const [editedTask, setEditedTask] = useState("")
@@ -66,7 +67,7 @@ const Modals = ({
                         <FormControl fullWidth sx={{ m: 1 }}>
                             <TextField
                                 id="outlined-basic"
-                                label="Tarea..."
+                                label={taskName || "Nueva tarea"}
                                 autoFocus
                                 margin="dense"
                                 type="text"

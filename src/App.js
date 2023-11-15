@@ -35,6 +35,7 @@ function App() {
   const [alertMessage, setAlertMessage] = useState(false)
   const [launchFunction, setLaunchFunction] = useState("")
   const [taskId, setTaskId] = useState("")
+  const [taskName, setTaskName] = useState("")
   const [themeForModal, setThemeForModal] = useState({})
   const [getCollectionStatus, setGetCollectionStatus] = useState(false)
   const [openBrackDrop, setOpenBrackDrop] = useState(false)
@@ -112,10 +113,11 @@ function App() {
     })
   }
 
-  const editeTask = (id) => {
+  const editeTask = (id, taskName) => {
     setAlertMessage(true)
     setLaunchFunction("askForEditeTask")
     setTaskId(id)
+    setTaskName(taskName)
     setThemeForModal({
       title: "Editar una tarea",
       message: "¿Desea editar esta tarea?",
@@ -175,7 +177,7 @@ function App() {
                                 variant="contained"
                                 color="warning"
                                 startIcon={<EditIcon />}
-                                onClick={() => editeTask(task.id)}
+                                onClick={() => editeTask(task.id, task.name)}
                               >
                                 Editar
                               </Button>
@@ -231,6 +233,7 @@ function App() {
         setTasks={setTasks}
         tasks={tasks}
         taskId={taskId}
+        taskName={taskName}
         themeForModal={themeForModal}
       />
       <Backdrop
