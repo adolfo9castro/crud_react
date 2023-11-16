@@ -1,7 +1,7 @@
 {
   "name": "crud",
   "version": "0.1.0",
-  "homepage":"https://github.com/adolfo9castro/crud_react",
+  "homepage": "https://adolfo9castro.github.io/que-haceres/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -20,6 +20,7 @@
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-scripts": "5.0.1",
     "styled-components": "^6.1.1",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },
   "peerDependencies": {

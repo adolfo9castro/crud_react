@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { v4 as uuid } from "uuid";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -41,10 +42,12 @@ function App() {
   const [openBrackDrop, setOpenBrackDrop] = useState(false)
   const [displayCircularProgress, setdisplayCircularProgress] = useState("")
   const [displayCheckCircleTwoToneIcon, setDisplayCheckCircleTwoToneIcon] = useState("none")
+  //const [sessionAndAuthor, setSessionAndAuthor] = useState("")
 
   useEffect(() => {
     (async () => {
-      const result = await getCollection("tasks")
+      const getSessionAndAuthor = document.cookie
+      const result = await getCollection("tasks", getSessionAndAuthor)
       setTasks(result.data)
       setGetCollectionStatus(result.statusResponse)
     })()
@@ -63,8 +66,22 @@ function App() {
       })
     }
     else {
-      setOpenBrackDrop(true)
-      const result = await addDocument({ name: task, position: tasks.length })
+      let setSessionAndAuthor = ""
+      if (!document.cookie) {
+        setSessionAndAuthor = uuid()
+        document.cookie = setSessionAndAuthor
+      }
+      else setSessionAndAuthor = document.cookie
+
+        //await addDocument({ session: uuid() }, "users")
+        setOpenBrackDrop(true)
+      const result = await addDocument(
+        {
+          name: task,
+          position: tasks.length,
+          author: setSessionAndAuthor
+        }, "tasks")
+
       if (!result.statusResponse) {
         setAlertMessage(true)
         setLaunchFunction("justOnlyCloseModal")
